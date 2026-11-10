@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:inkpad}",
+            "name": "Debug InkPad",
+            "target": "InkPad",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug InkPad"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:inkpad}",
+            "name": "Release InkPad",
+            "target": "InkPad",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release InkPad"
+        }
+    ]
+}

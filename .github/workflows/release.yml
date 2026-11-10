@@ -1,6 +1,6 @@
 name: Release
 
-# Push a tag like v0.2.0 and this builds InkPad.app, zips it and publishes a GitHub release.
+# Push a tag like v0.2.0 and this builds InkPad.app, packs it into a .dmg and publishes a GitHub release.
 on:
   push:
     tags: ["v*"]
@@ -33,22 +33,22 @@ jobs:
       - name: Build InkPad.app
         run: VERSION="${{ steps.v.outputs.version }}" scripts/bundle.sh
 
-      - name: Zip
+      - name: Package DMG
         run: |
-          ditto -c -k --sequesterRsrc --keepParent build/InkPad.app "InkPad-${{ steps.v.outputs.version }}.zip"
-          shasum -a 256 "InkPad-${{ steps.v.outputs.version }}.zip" | tee "InkPad-${{ steps.v.outputs.version }}.zip.sha256"
+          VERSION="${{ steps.v.outputs.version }}" scripts/dmg.sh
+          shasum -a 256 "InkPad-${{ steps.v.outputs.version }}.dmg" | tee "InkPad-${{ steps.v.outputs.version }}.dmg.sha256"
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: InkPad-${{ steps.v.outputs.version }}.zip
+          subject-path: InkPad-${{ steps.v.outputs.version }}.dmg
 
       - name: Upload artifact (manual runs)
         if: github.ref_type != 'tag'
         uses: actions/upload-artifact@v4
         with:
           name: InkPad-${{ steps.v.outputs.version }}
-          path: InkPad-${{ steps.v.outputs.version }}.zip*
+          path: InkPad-${{ steps.v.outputs.version }}.dmg*
 
       - name: Publish release
         if: github.ref_type == 'tag'
@@ -58,15 +58,15 @@ jobs:
           cat > notes.md <<'NOTES'
           ## Install
 
-          1. Unzip and drag **InkPad.app** to Applications.
+          1. Open the **.dmg** and drag **InkPad.app** to Applications.
           2. This build is ad-hoc signed, not notarized. macOS will block it the first time: open **System Settings → Privacy & Security → Open Anyway**, or run
              `xattr -dr com.apple.quarantine /Applications/InkPad.app`
           3. Allow **Accessibility** access when asked (needed to type into other apps).
 
-          Requires macOS 15 or later. Verify the download with `gh attestation verify InkPad-*.zip --repo ${{ github.repository }}`.
+          Requires macOS 15 or later. Verify the download with `gh attestation verify InkPad-*.dmg --repo ${{ github.repository }}`.
           NOTES
           gh release create "${GITHUB_REF_NAME}" \
-            "InkPad-${{ steps.v.outputs.version }}.zip" \
-            "InkPad-${{ steps.v.outputs.version }}.zip.sha256" \
+            "InkPad-${{ steps.v.outputs.version }}.dmg" \
+            "InkPad-${{ steps.v.outputs.version }}.dmg.sha256" \
             --title "InkPad ${GITHUB_REF_NAME}" \
             --generate-notes --notes-file notes.md

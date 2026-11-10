@@ -66,7 +66,7 @@ No window switching, no special text field. It works in Messages, Notes, a brows
 
 ## Install
 
-**Download.** Grab the latest `InkPad-x.y.z.zip` from [Releases](https://github.com/NOOB-3301/inkpad/releases/latest), unzip it and drag InkPad.app to Applications. Each release is built by GitHub Actions from the public source and carries a build attestation: `gh attestation verify InkPad-*.zip --repo NOOB-3301/inkpad`.
+**Download.** Grab the latest `InkPad-x.y.z.dmg` from [Releases](https://github.com/NOOB-3301/inkpad/releases/latest), open it and drag InkPad.app to Applications. Each release is built by GitHub Actions from the public source and carries a build attestation: `gh attestation verify InkPad-*.dmg --repo NOOB-3301/inkpad`.
 
 **Or build it yourself** in a minute:
 
@@ -147,9 +147,10 @@ pen / mouse ──► NSEvent (absolute mouse events) ────────�
 swift build                 # debug build
 scripts/test.sh             # runs the 16 unit tests (works with Command Line Tools only)
 scripts/bundle.sh           # release .app bundle in build/ (VERSION=1.2.3 scripts/bundle.sh to set the version)
+scripts/dmg.sh              # packs build/InkPad.app into InkPad-<version>.dmg
 ```
 
-**Releasing.** Push a tag and GitHub Actions tests, builds, zips, attests and publishes it:
+**Releasing.** Push a tag and GitHub Actions tests, builds, packs a .dmg, attests and publishes it:
 
 ```sh
 git tag v0.1.0 && git push origin v0.1.0
@@ -166,7 +167,7 @@ Tests/                unit tests
 Resources/            app icon (SVG source and .icns)
 .github/workflows/    CI and tag-triggered release
 docs/                 screenshots used in this README
-scripts/              bundle and test helpers
+scripts/              bundle, dmg and test helpers
 ```
 
 ## The website

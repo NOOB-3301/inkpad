@@ -10,6 +10,8 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/NOOB-3301/inkpad/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/NOOB-3301/inkpad/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/NOOB-3301/inkpad/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/NOOB-3301/inkpad?color=d7301f"></a>
   <img alt="macOS 15+" src="https://img.shields.io/badge/macOS-15%2B-17171a">
   <img alt="Swift 6" src="https://img.shields.io/badge/Swift-6-d7301f">
   <img alt="License GPL-3.0" src="https://img.shields.io/badge/license-GPL--3.0-17171a">
@@ -64,7 +66,9 @@ No window switching, no special text field. It works in Messages, Notes, a brows
 
 ## Install
 
-There is no signed release yet. Build it yourself in a minute:
+**Download.** Grab the latest `InkPad-x.y.z.zip` from [Releases](https://github.com/NOOB-3301/inkpad/releases/latest), unzip it and drag InkPad.app to Applications. Each release is built by GitHub Actions from the public source and carries a build attestation: `gh attestation verify InkPad-*.zip --repo NOOB-3301/inkpad`.
+
+**Or build it yourself** in a minute:
 
 ```sh
 git clone https://github.com/NOOB-3301/inkpad.git
@@ -142,8 +146,16 @@ pen / mouse ──► NSEvent (absolute mouse events) ────────�
 ```sh
 swift build                 # debug build
 scripts/test.sh             # runs the 16 unit tests (works with Command Line Tools only)
-scripts/bundle.sh           # release .app bundle in build/
+scripts/bundle.sh           # release .app bundle in build/ (VERSION=1.2.3 scripts/bundle.sh to set the version)
 ```
+
+**Releasing.** Push a tag and GitHub Actions tests, builds, zips, attests and publishes it:
+
+```sh
+git tag v0.1.0 && git push origin v0.1.0
+```
+
+CI (`.github/workflows/ci.yml`) builds and runs the tests on every push and pull request.
 
 `scripts/test.sh` wires up swift-testing for Command Line Tools installs that don't ship it in SwiftPM; with full Xcode it just runs `swift test`.
 
@@ -152,6 +164,7 @@ Sources/InkPadCore/   recognition, gestures, strokes (tested)
 Sources/InkPad/       menu-bar app and UI
 Tests/                unit tests
 Resources/            app icon (SVG source and .icns)
+.github/workflows/    CI and tag-triggered release
 docs/                 screenshots used in this README
 scripts/              bundle and test helpers
 ```
@@ -162,6 +175,7 @@ The marketing site (Next.js, GSAP, three.js) lives in a separate repo: [**inkpad
 
 ## Roadmap
 
+- [x] Automated build and release from tags (ad-hoc signed)
 - [ ] Signed, notarized release so Gatekeeper and Accessibility stop getting in the way
 - [ ] Korean (the engine is ready; Hangul handwriting needs more testing)
 - [ ] Chinese
